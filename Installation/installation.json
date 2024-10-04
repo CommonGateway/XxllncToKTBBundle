@@ -3,23 +3,7 @@
     "applications": [],
     "users": [],
     "cards": [],
-    "actions": {
-        "handlers": [
-            {
-                "reference": "https://development.zaaksysteem.nl/action/xxllnctoktb.TaakToXxllnc.action.json",
-                "actionHandler": "CommonGateway\\XxllncToKTBBundle\\Service\\",
-                "listens": ["commongateway.object.create", "commongateway.object.update", "commongateway.object.delete"],
-                "conditions": {
-                    "==": [{"var": "entity"}, "https://vng.opencatalogi.nl/schemas/zrc.zaak.schema.json"]
-                },
-                "configuration": {
-                    "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json",
-                    "mapping": "",
-                    "deleteMapping": ""
-                }
-            }
-        ]
-    },
+    "actions": [],
     "collections": [],
     "endpoints": {
         "schema": [
