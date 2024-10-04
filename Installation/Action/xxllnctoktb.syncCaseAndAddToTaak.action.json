@@ -1,0 +1,18 @@
+{
+    "title": "SyncCaseAndAddToTaak",
+    "$id": "https://commongateway.nl/action/xxllnctoktb.SyncCaseAndAddToTaak.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["xxllnctoktb.syncCaseOfTaak"],
+    "conditions": {
+        "!!": { "var": "relationships.case.data.id" }
+    },
+    "class": "CommonGateway\\XxllncToKTBBundle\\ActionHandler\\NotificationHandler",
+    "configuration": {
+        "mapping": "https://commongateway.nl/mapping/xxllnctoktb.TaskToKTBTask.mapping.json",
+        "schema": "https://commongateway.nl/klant.taak.schema.json",
+        "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv1.source.json",
+        "sourceIdField": "task_uuid",
+        "pluginName": "common-gateway/xxllnc-to-ktb-bundle"
+    }
+}

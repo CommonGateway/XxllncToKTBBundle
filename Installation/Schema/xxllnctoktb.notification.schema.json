@@ -1,0 +1,14 @@
+{
+    "$id": "https://commongateway.nl/schema/xxllnctoktb.notification.schema.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Entity.schema.json",
+    "version": "0.1",
+    "title": "Notification",
+    "description": "A notification object from xxllnc",
+    "type": "object",
+    "properties": {
+        "changes": {
+            "type": "array",
+            "format": "json"
+        }
+    }
+  }

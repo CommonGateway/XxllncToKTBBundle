@@ -1,0 +1,20 @@
+{
+    "title": "TaskToTaak",
+    "$id": "https://development.zaaksysteem.nl/mapping/xxllnc.TaskToTaak.mapping.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version": "0.0.1",
+    "passTrough": false,
+    "mapping": {
+        "_sourceId": "id",
+        "type": "https://development.zaaksysteem.nl/apidocs/?urls.primaryName=API+v2+-+Case+Management#/Tasks/get_task_list",
+        "title": "attributes.title",
+        "onderwerp": "attributes.title",
+        "toelichting": "attributes.description"
+    },
+    "cast": {
+        "_sourcedId": "unsetIfValue==id",
+        "title": "unsetIfValue==attributes.title",
+        "onderwerp": "unsetIfValue==attributes.title",
+        "toelichting": "unsetIfValue==attributes.description"
+    }
+}
