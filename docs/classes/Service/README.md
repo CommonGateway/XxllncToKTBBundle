@@ -1,4 +1,4 @@
-# CommonGateway\PetStoreBundle
+# CommonGateway\XxllncToKTBBundle
 
 * [Service\InstallationService](Service/InstallationService.md) 
-* [Service\PetStoreService](Service/PetStoreService.md) 
+* [Service\XxllncToKTBService](Service/XxllncToKTBService.md) 

@@ -1,6 +1,6 @@
 <?php
 
-namespace CommonGateway\PetStoreBundle\Service;
+namespace CommonGateway\XxllncToKTBBundle\Service;
 
 use CommonGateway\CoreBundle\Installer\InstallerInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,7 +56,7 @@ class InstallationService implements InstallerInterface
      */
     public function install()
     {
-        $this->logger->debug("PetStoreBundle -> Install()", ['plugin' => 'common-gateway/pet-store-bundle']);
+        $this->logger->debug("XxllncToKTBBundle -> Install()", ['plugin' => 'common-gateway/xxllnc-to-ktb-bundle']);
 
         $this->checkDataConsistency();
 
@@ -70,7 +70,7 @@ class InstallationService implements InstallerInterface
      */
     public function update()
     {
-        $this->logger->debug("PetStoreBundle -> Update()", ['plugin' => 'common-gateway/pet-store-bundle']);
+        $this->logger->debug("XxllncToKTBBundle -> Update()", ['plugin' => 'common-gateway/xxllnc-to-ktb-bundle']);
 
         $this->checkDataConsistency();
 
@@ -84,7 +84,7 @@ class InstallationService implements InstallerInterface
      */
     public function uninstall()
     {
-        $this->logger->debug("PetStoreBundle -> Uninstall()", ['plugin' => 'common-gateway/pet-store-bundle']);
+        $this->logger->debug("XxllncToKTBBundle -> Uninstall()", ['plugin' => 'common-gateway/xxllnc-to-ktb-bundle']);
 
         // Do some cleanup to uninstall correctly...
 

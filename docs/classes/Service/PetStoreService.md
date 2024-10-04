@@ -1,4 +1,4 @@
-# CommonGateway\PetStoreBundle\Service\PetStoreService  
+# CommonGateway\XxllncToKTBBundle\Service\XxllncToKTBService  
 
 An example service for adding business logic to your class.
 
@@ -16,7 +16,7 @@ An example service for adding business logic to your class.
 
 
 
-### PetStoreService::__construct  
+### XxllncToKTBService::__construct  
 
 **Description**
 
@@ -40,7 +40,7 @@ An example service for adding business logic to your class.
 <hr />
 
 
-### PetStoreService::petStoreHandler  
+### XxllncToKTBService::petStoreHandler  
 
 **Description**
 

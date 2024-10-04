@@ -16,7 +16,7 @@
       "pathname": "/Redocly"
     },
     "handleClick": {
-      "link": "https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/CommonGateway/PetStoreBundle/main/docs/openapi.json&nocors"
+      "link": "https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/CommonGateway/XxllncToKTBBundle/main/docs/openapi.json&nocors"
     }
   },
   {
@@ -52,15 +52,15 @@
         }
       },
       {
-        "label": "PetStoreService",
+        "label": "XxllncToKTBService",
         "type": "internalMarkdown",
         "current": {
-          "pathname": "/Service/PetStoreService"
+          "pathname": "/Service/XxllncToKTBService"
         },
         "handleClick": {
           "internalMarkdown": {
             "directoryName": "Service",
-            "fileName": "PetStoreService"
+            "fileName": "XxllncToKTBService"
           }
         }
       }
