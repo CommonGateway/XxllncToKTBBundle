@@ -2,7 +2,7 @@ publiccodeYmlVersion: '0.1'
 name: PetstoreBundle
 applicationSuite: null
 url: https://github.com/CommonGateway/PetstoreBundle
-landingURL: https://commongateway.github.io/PetStoreBundle
+landingURL: https://commongateway.github.io/XxllncToKTBBundle
 isBasedOn: null
 softwareVersion: null
 logo: https://avatars.githubusercontent.com/u/106860777?v=4
@@ -21,7 +21,7 @@ description:
     genericName: null
     shortDescription: "A symfony bundle as example."
     longDescription: "An example repository for creating Symfony flex bundles as Gateway plugins."
-    documentation: https://commongateway.github.io/PetStoreBundle
+    documentation: https://commongateway.github.io/XxllncToKTBBundle
     apiDocumentation: null
     features:
       - Common Ground Gateway Plugin
@@ -33,7 +33,7 @@ description:
     genericName: null
     shortDescription: "Een symfony bundel als voorbeeld."
     longDescription: "Een voorbeeldrepository voor het maken van Symfony flex-bundels als Gateway-plug-ins."
-    documentation: https://commongateway.github.io/PetStoreBundle
+    documentation: https://commongateway.github.io/XxllncToKTBBundle
     apiDocumentation: null
     features:
       - Common Ground Gateway Plugin

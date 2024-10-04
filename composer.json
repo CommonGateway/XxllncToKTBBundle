@@ -1,5 +1,5 @@
 {
-    "name": "common-gateway/pet-store-bundle",
+    "name": "common-gateway/xxllnc-to-ktb-bundle",
     "description": "An example package for creating symfony flex bundles as plugins",
     "type": "symfony-bundle",
     "keywords": [
@@ -17,7 +17,8 @@
     "require": {
         "php": ">=7.4",
         "commongateway/corebundle": "^1.2.68 | <2.0",
-        "common-gateway/customer-notifications-bundle": "^0.0.40 | < 1.0"
+        "common-gateway/customer-interaction-bundle": "^0.0.136 | < 1.0",
+        "common-gateway/xxllnc-zgw-bundle": "^0.1.75 | <0.2.0"
     },
     "require-dev": {
         "symfony/dependency-injection": "~3.4|~4.1|~5.0"
@@ -35,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CommonGateway\\PetStoreBundle\\": "src/"
+            "CommonGateway\\XxllncToKTBBundle\\": "src/"
         }
     }
 }
