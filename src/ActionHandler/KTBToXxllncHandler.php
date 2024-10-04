@@ -23,6 +23,7 @@ use Respect\Validation\Exceptions\ComponentException;
 class KTBToXxllncHandler implements ActionHandlerInterface
 {
 
+
     /**
      * Class constructor.
      *
@@ -30,8 +31,8 @@ class KTBToXxllncHandler implements ActionHandlerInterface
      */
     public function __construct(
         private readonly Service $service,
-    )
-    {
+    ) {
+
     }//end __construct()
 
 
