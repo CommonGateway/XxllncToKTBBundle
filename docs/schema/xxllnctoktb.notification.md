@@ -8,7 +8,10 @@ A notification object from xxllnc
 
 | Property | Type | Description | Required |
 |----------|------|-------------|----------|
-| changes | array | N/A | No |
-| case_uuid | string | N/A | No |
+| case_number | integer | N/A | No |
 | entity_id | string | N/A | No |
-| case_number | string | N/A | No |
+| case_uuid | string | N/A | No |
+| changes | array | N/A | No |
+| entity_type | string | N/A | No |
+| event_name | string | N/A | No |
+| description | string | N/A | No |
