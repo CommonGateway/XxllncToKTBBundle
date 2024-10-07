@@ -4,5 +4,8 @@ footer: Common Gateway Plugin | Commongateway | Xxllnctoktbbundle
 header: Schema
 class Notification {
   + changes: array
+  + case_uuid: string
+  + entity_id: string
+  + case_number: string
 }
 @enduml

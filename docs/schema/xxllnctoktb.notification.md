@@ -9,3 +9,6 @@ A notification object from xxllnc
 | Property | Type | Description | Required |
 |----------|------|-------------|----------|
 | changes | array | N/A | No |
+| case_uuid | string | N/A | No |
+| entity_id | string | N/A | No |
+| case_number | string | N/A | No |
