@@ -2,12 +2,9 @@
 
 namespace CommonGateway\XxllncToKTBBundle\Service;
 
-use App\Service\SynchronizationService as OldSynchronizationService;
-use CommonGateway\CoreBundle\Service\SynchronizationService;
+use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
-use CommonGateway\CoreBundle\Service\MappingService;
 use App\Service\GatewayResourceService as ResourceService;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Exception;
 
@@ -29,12 +26,9 @@ class NotificationToTaakService
      * __construct.
      */
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
         private readonly ResourceService $resourceService,
         private readonly CallService $callService,
-        private readonly OldSynchronizationService $oldSynchronizationService,
         private readonly SynchronizationService $synchronizationService,
-        private readonly MappingService $mappingService,
         private readonly LoggerInterface $pluginLogger,
     ) {
 
@@ -92,10 +86,10 @@ class NotificationToTaakService
         }
 
         // Find or create synchronization object.
-        $synchronization = $this->oldSynchronizationService->findSyncBySource(source: $source, entity: $schema, sourceId: $taskWeNeed['id'], endpoint: $endpoint);
+        $synchronization = $this->synchronizationService->findSyncBySource(source: $source, entity: $schema, sourceId: $taskWeNeed['id'], endpoint: $endpoint);
 
         // Synchronize.
-        $synchronization = $this->oldSynchronizationService->synchronize(synchronization: $synchronization, sourceObject: $taskWeNeed, unsafe: false, mapping: $mapping);
+        $synchronization = $this->synchronizationService->synchronize(synchronization: $synchronization, sourceObject: $taskWeNeed, unsafe: false, mapping: $mapping);
 
         return $data;
 
