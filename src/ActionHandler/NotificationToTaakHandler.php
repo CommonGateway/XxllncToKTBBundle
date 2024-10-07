@@ -23,6 +23,7 @@ use Respect\Validation\Exceptions\ComponentException;
 class NotificationToTaakHandler implements ActionHandlerInterface
 {
 
+
     /**
      * Class constructor.
      *
@@ -30,8 +31,8 @@ class NotificationToTaakHandler implements ActionHandlerInterface
      */
     public function __construct(
         private readonly Service $service,
-    )
-    {
+    ) {
+
     }//end __construct()
 
 
@@ -55,17 +56,17 @@ class NotificationToTaakHandler implements ActionHandlerInterface
                     'description' => 'The endpoint we request the tasks from.',
                     'example'     => '/api/v2/cm/task/get_task_list',
                 ],
-                'source' => [
+                'source'   => [
                     'type'        => 'string',
                     'description' => 'The source we use to fetch tasks.',
                     'example'     => 'https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json',
                 ],
-                'mapping' => [
+                'mapping'  => [
                     'type'        => 'string',
                     'description' => 'The mapping we use for tasks to taken.',
                     'example'     => 'https://commongateway.nl/mapping/xxllnctoktb.TaskToTaak.mapping.json',
                 ],
-                'schema' => [
+                'schema'   => [
                     'type'        => 'string',
                     'description' => 'The schema of the customerinteractionbundle taak.',
                     'example'     => 'https://commongateway.nl/klant.taak.schema.json',

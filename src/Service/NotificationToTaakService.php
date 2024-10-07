@@ -24,29 +24,31 @@ use Exception;
 class NotificationToTaakService
 {
 
+
     /**
      * __construct.
      */
     public function __construct(
-        private readonly EntityManagerInterface    $entityManager,
-        private readonly ResourceService           $resourceService,
-        private readonly CallService               $callService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ResourceService $resourceService,
+        private readonly CallService $callService,
         private readonly OldSynchronizationService $oldSynchronizationService,
-        private readonly SynchronizationService    $synchronizationService,
-        private readonly MappingService            $mappingService,
-        private readonly LoggerInterface           $pluginLogger,
+        private readonly SynchronizationService $synchronizationService,
+        private readonly MappingService $mappingService,
+        private readonly LoggerInterface $pluginLogger,
     ) {
+
     }//end __construct()
 
 
     /**
      * Synchronizes a CustomerInteractionBundle taak to the zaaksysteem v2 task equilevant.
-     * 
+     *
      * Can handle create, update and delete. Prerequisite is that the taak has a zaak that is synchronized as case in the zaaksysteem.
-     * 
+     *
      * @param array $configuration
      * @param array $data
-     * 
+     *
      * @return array $data
      */
     private function synchronizeTask(array $configuration, array $data): array
@@ -55,15 +57,15 @@ class NotificationToTaakService
         $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
 
         // get needed config objects.
-        $source = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
-        $schema = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
+        $source  = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
+        $schema  = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
         $mapping = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
 
         if ($source === null || $schema === null || $mapping === null) {
             return $data;
         }
 
-        $endpoint = $configuration['endpoint'] . "?filter[relationships.case.id]=" . $data['case_uuid'];
+        $endpoint = $configuration['endpoint']."?filter[relationships.case.id]=".$data['case_uuid'];
 
         // Fetch all tasks of the case
         try {
@@ -96,20 +98,22 @@ class NotificationToTaakService
         $synchronization = $this->oldSynchronizationService->synchronize(synchronization: $synchronization, sourceObject: $taskWeNeed, unsafe: false, mapping: $mapping);
 
         return $data;
+
     }//end synchronizeTask()
 
 
     /**
      * Executes synchronizeTaak
-     * 
+     *
      * @param array $configuration
      * @param array $data
-     * 
-     * @return array $this->synchronizeTaak() 
+     *
+     * @return array $this->synchronizeTaak()
      */
     public function execute(array $configuration, array $data): array
     {
         return $this->synchronizeTask(configuration: $configuration, data: $data);
+
     }//end execute()
 
 
