@@ -101,7 +101,7 @@ class NotificationToTaakService
 
         // Create response.
         $response         = ['message' => 'Notification received and task synchronized'];
-        $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-type' => 'application/json']);
+        $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-Type' => 'application/json']);
 
         return $data;
 
