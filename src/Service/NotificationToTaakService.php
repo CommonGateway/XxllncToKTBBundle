@@ -5,7 +5,10 @@ namespace CommonGateway\XxllncToKTBBundle\Service;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService as ResourceService;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
+
 use Exception;
 
 /**
@@ -30,6 +33,7 @@ class NotificationToTaakService
         private readonly CallService $callService,
         private readonly SynchronizationService $synchronizationService,
         private readonly LoggerInterface $pluginLogger,
+        private readonly EntityManagerInterface $entityManager,
     ) {
 
     }//end __construct()
@@ -40,12 +44,12 @@ class NotificationToTaakService
      *
      * Can handle create, update and delete. Prerequisite is that the taak has a zaak that is synchronized as case in the zaaksysteem.
      *
-     * @param array $configuration
      * @param array $data
+     * @param array $configuration
      *
      * @return array $data
      */
-    private function synchronizeTask(array $configuration, array $data): array
+    private function synchronizeTask(array $data, array $configuration): array
     {
         $this->pluginLogger->debug('NotificationToTaakService -> synchronizeTask');
         $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
@@ -64,16 +68,16 @@ class NotificationToTaakService
         // Fetch all tasks of the case
         try {
             $this->pluginLogger->info("Fetching tasks for case id: {$data['case_uuid']}..");
-            $response = $this->callService->call($source, $endpoint, 'GET', [], false, false);
-            $tasks    = $this->callService->decodeResponse(source: $source, response: $response);
+            $response = $this->callService->call(source: $source, endpoint: $endpoint, method: 'GET');
+            $response = $this->callService->decodeResponse(source: $source, response: $response);
         } catch (Exception $e) {
             $this->pluginLogger->error("Failed to fetch tasks for case: {$data['case_uuid']}, message:  {$e->getMessage()}");
 
-            return null;
+            return $data;
         }//end try
 
-        // Check if the entity_id is equal to task id
-        foreach ($tasks as $task) {
+        // Check if the entity_id is equal to task_id
+        foreach ($response['data'] as $task) {
             if ($data['entity_id'] === $task['id']) {
                 $taskWeNeed = $task;
             }
@@ -91,6 +95,14 @@ class NotificationToTaakService
         // Synchronize.
         $synchronization = $this->synchronizationService->synchronize(synchronization: $synchronization, sourceObject: $taskWeNeed, unsafe: false, mapping: $mapping);
 
+        // Save to database.
+        $this->entityManager->persist($synchronization);
+        $this->entityManager->flush();
+
+        // Create response.
+        $response = ['message' => 'Notification received and task synchronized'];
+        $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-type' => 'application/json']);
+
         return $data;
 
     }//end synchronizeTask()
@@ -99,14 +111,14 @@ class NotificationToTaakService
     /**
      * Executes synchronizeTaak
      *
-     * @param array $configuration
      * @param array $data
+     * @param array $configuration
      *
      * @return array $this->synchronizeTaak()
      */
-    public function execute(array $configuration, array $data): array
+    public function execute(array $data, array $configuration): array
     {
-        return $this->synchronizeTask(configuration: $configuration, data: $data);
+        return $this->synchronizeTask(data: $data['body'], configuration: $configuration);
 
     }//end execute()
 

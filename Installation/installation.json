@@ -1,16 +1,11 @@
 {
     "installationService": "CommonGateway\\XxllncToKTBBundle\\Service\\InstallationService",
-    "applications": [],
-    "users": [],
-    "cards": [],
-    "actions": [],
-    "collections": [],
     "endpoints": {
-        "schema": [
+        "schemas": [
             {
                 "reference": "https://commongateway.nl/schema/xxllnctoktb.notification.schema.json",
                 "description": "An endpoint for notifications from xxllnc zaaksysteem",
-                "path": "/xxllnc/notifications",
+                "path": "/xxllnc/tasks/notifications",
                 "version": "0.0.1",
                 "methods": [
                     "POST",

@@ -6,15 +6,21 @@
     "listens": ["xxllnctoktb.notification.task"],
     "throws": ["xxllnctoktb.syncCaseOfTaak"],
     "conditions": {
-        "!!": { "var": "task_uuid" }
+        "and": [
+            {
+                "!!": { "var": "body.entity_id" }
+            },
+            {
+                "!!": { "var": "body.case_uuid" }
+            }
+
+        ]
     },
     "class": "CommonGateway\\XxllncToKTBBundle\\ActionHandler\\NotificationToTaakHandler",
     "configuration": {
         "mapping": "https://commongateway.nl/mapping/xxllnctoktb.TaskToTaak.mapping.json",
         "schema": "https://commongateway.nl/klant.taak.schema.json",
         "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json",
-        "endpoint": "/api/v2/cm/task/get_task_list",
-        "sourceIdField": "task_uuid",
-        "pluginName": "common-gateway/xxllnc-to-ktb-bundle"
+        "endpoint": "/cm/task/get_task_list"
     }
 }
