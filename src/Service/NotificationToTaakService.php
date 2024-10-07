@@ -2,9 +2,9 @@
 
 namespace CommonGateway\XxllncToKTBBundle\Service;
 
-use CommonGateway\CoreBundle\Service\SynchronizationService;
+use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
-use App\Service\GatewayResourceService as ResourceService;
+use CommonGateway\CoreBundle\Service\GatewayResourceService as ResourceService;
 use Psr\Log\LoggerInterface;
 use Exception;
 
