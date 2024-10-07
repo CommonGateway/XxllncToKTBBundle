@@ -1,7 +1,8 @@
 @startuml
-title: All schemas
+title: Notification
 footer: Common Gateway Plugin | Commongateway | Xxllnctoktbbundle 
 header: Schema
+
 class Notification {
   + case_number: integer
   + entity_id: string

@@ -1,32 +1,11 @@
 {
     "installationService": "CommonGateway\\XxllncToKTBBundle\\Service\\InstallationService",
-    "applications": [],
-    "users": [],
-    "cards": [],
-    "actions": {
-        "handlers": [
-            {
-                "reference": "https://development.zaaksysteem.nl/action/xxllnctoktb.TaakToXxllnc.action.json",
-                "actionHandler": "CommonGateway\\XxllncToKTBBundle\\Service\\",
-                "listens": ["commongateway.object.create", "commongateway.object.update", "commongateway.object.delete"],
-                "conditions": {
-                    "==": [{"var": "entity"}, "https://vng.opencatalogi.nl/schemas/zrc.zaak.schema.json"]
-                },
-                "configuration": {
-                    "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json",
-                    "mapping": "",
-                    "deleteMapping": ""
-                }
-            }
-        ]
-    },
-    "collections": [],
     "endpoints": {
-        "schema": [
+        "schemas": [
             {
                 "reference": "https://commongateway.nl/schema/xxllnctoktb.notification.schema.json",
                 "description": "An endpoint for notifications from xxllnc zaaksysteem",
-                "path": "/xxllnc/notifications",
+                "path": "/xxllnc/tasks/notifications",
                 "version": "0.0.1",
                 "methods": [
                     "POST",

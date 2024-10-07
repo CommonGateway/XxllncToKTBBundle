@@ -1,0 +1,25 @@
+{
+    "title": "TaskToTaak",
+    "$id": "https://commongateway.nl/mapping/xxllnctoktb.TaskToTaak.mapping.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version": "0.0.1",
+    "passTrough": false,
+    "mapping": {
+        "_sourceId": "id",
+        "type": "https://development.zaaksysteem.nl/apidocs/?urls.primaryName=API+v2+-+Case+Management#/Tasks/get_task_list",
+        "title": "attributes.title",
+        "onderwerp": "attributes.title",
+        "toelichting": "attributes.description",
+        "verloopdatum": "attributes.due_date",
+        "vervaldatum": "attributes.due_date",
+        "status": "{% if attributes.completed|default and attributes.completed is same as(true) %}gesloten{% else %}open{% endif %}"
+    },
+    "cast": {
+        "_sourcedId": "unsetIfValue==id",
+        "title": "unsetIfValue==attributes.title",
+        "onderwerp": "unsetIfValue==attributes.title",
+        "toelichting": "unsetIfValue==attributes.description",
+        "verloopdatum": "unsetIfValue==attributes.attributes.due_date",
+        "vervaldatum": "unsetIfValue==attributes.attributes.due_date"
+    }
+}
