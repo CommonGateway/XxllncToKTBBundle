@@ -9,6 +9,15 @@
         "changes": {
             "type": "array",
             "format": "json"
+        },
+        "case_uuid": {
+            "type": "string"
+        },
+        "entity_id": {
+            "type": "string"
+        },
+        "case_number": {
+            "type": "string"
         }
     }
   }

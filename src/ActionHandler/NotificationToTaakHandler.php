@@ -49,7 +49,28 @@ class NotificationToTaakHandler implements ActionHandlerInterface
             'title'       => 'NotificationToTaak',
             'description' => 'This handler gets throught the notification the task and syncs it to taak',
             'required'    => [],
-            'properties'  => [],
+            'properties'  => [
+                'endpoint' => [
+                    'type'        => 'string',
+                    'description' => 'The endpoint we request the tasks from.',
+                    'example'     => '/api/v2/cm/task/get_task_list',
+                ],
+                'source' => [
+                    'type'        => 'string',
+                    'description' => 'The source we use to fetch tasks.',
+                    'example'     => 'https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json',
+                ],
+                'mapping' => [
+                    'type'        => 'string',
+                    'description' => 'The mapping we use for tasks to taken.',
+                    'example'     => 'https://commongateway.nl/mapping/xxllnctoktb.TaskToTaak.mapping.json',
+                ],
+                'schema' => [
+                    'type'        => 'string',
+                    'description' => 'The schema of the customerinteractionbundle taak.',
+                    'example'     => 'https://commongateway.nl/klant.taak.schema.json',
+                ],
+            ],
         ];
 
     }//end getConfiguration()

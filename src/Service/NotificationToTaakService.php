@@ -1,14 +1,4 @@
 <?php
-/**
- * This class handles the synchronization of a notification of a zaaksysteem task taken to a customerinteractionbundle taak.
- *
- * Fetches all tasks of the case of the notification.
- *
- * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
- * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
- *
- * @category Service
- */
 
 namespace CommonGateway\XxllncToKTBBundle\Service;
 
@@ -18,22 +8,21 @@ use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\MappingService;
 use App\Service\GatewayResourceService as ResourceService;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Gateway as Source;
 use Psr\Log\LoggerInterface;
-use Ramsay\Uuid;
+use Exception;
 
+/**
+ * This class handles the synchronization of a notification of a zaaksysteem task taken to a customerinteractionbundle taak.
+ *
+ * Fetches all tasks of the case of the notification, find the right one of the notification and then synchronizes.
+ *
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
+ * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * @category Service
+ */
 class NotificationToTaakService
 {
-
-    /**
-     * @var array
-     */
-    private array $configuration;
-
-    /**
-     * @var array
-     */
-    private array $data;
 
     /**
      * __construct.
@@ -55,63 +44,58 @@ class NotificationToTaakService
      * 
      * Can handle create, update and delete. Prerequisite is that the taak has a zaak that is synchronized as case in the zaaksysteem.
      * 
-     * @return array $this->data
+     * @param array $configuration
+     * @param array $data
+     * 
+     * @return array $data
      */
-    private function synchronizeTask(): array
+    private function synchronizeTask(array $configuration, array $data): array
     {
         $this->pluginLogger->debug('NotificationToTaakService -> synchronizeTask');
         $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
 
-        // Get Source zaaksysteem v2.
-        $source = $this->resourceService->getSource(reference: $this->configuration['source'], pluginName: $pluginName);
-        if ($source === null) {
-            return $this->data;
+        // get needed config objects.
+        $source = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
+        $schema = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
+        $mapping = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
+
+        if ($source === null || $schema === null || $mapping === null) {
+            return $data;
         }
 
-        // Get taak schema.
-        $schema = $this->resourceService->getSchema(reference: $this->configuration['schema'], pluginName: $pluginName);
-        if ($schema === null) {
-            return $this->data;
-        }
-
-        // Get task to taak mapping.
-        $mapping = $this->resourceService->getMapping(reference: $this->configuration['mapping'], pluginName: $pluginName);
-        if ($mapping === null) {
-            return $this->data;
-        }
-
-        $endpoint = $this->configuration['endpoint'] . "?filter[relationships.case.id]=" . $this->data['case_uuid'];
+        $endpoint = $configuration['endpoint'] . "?filter[relationships.case.id]=" . $data['case_uuid'];
 
         // Fetch all tasks of the case
         try {
-            $this->pluginLogger->info("Fetching tasks for case id: {$this->data['case_uuid']}..");
+            $this->pluginLogger->info("Fetching tasks for case id: {$data['case_uuid']}..");
             $response = $this->callService->call($source, $endpoint, 'GET', [], false, false);
             $tasks    = $this->callService->decodeResponse(source: $source, response: $response);
         } catch (Exception $e) {
-            // isset($this->style) === true && $this->style->error("Failed to fetch case: $caseID, message:  {$e->getMessage()}");
-            $this->pluginLogger->error("Failed to fetch tasks for case: {$this->data['case_uuid']}, message:  {$e->getMessage()}");
+            $this->pluginLogger->error("Failed to fetch tasks for case: {$data['case_uuid']}, message:  {$e->getMessage()}");
 
             return null;
         }//end try
 
         // Check if the entity_id is equal to task id
         foreach ($tasks as $task) {
-            if ($this->data['entity_id'] === $task['id']) {
+            if ($data['entity_id'] === $task['id']) {
                 $taskWeNeed = $task;
             }
         }
 
         if (isset($taskWeNeed) === false) {
-            $this->pluginLogger->error("Could not find the correct task ({$this->data['entity_id']}) in the tasks of the case ({$this->data['case_uuid']})");
+            $this->pluginLogger->error("Could not find the correct task ({$data['entity_id']}) in the tasks of the case ({$data['case_uuid']})");
 
-            return $this->data;
+            return $data;
         }
 
-        // Synchronize correct task.
+        // Find or create synchronization object.
         $synchronization = $this->oldSynchronizationService->findSyncBySource(source: $source, entity: $schema, sourceId: $taskWeNeed['id'], endpoint: $endpoint);
+
+        // Synchronize.
         $synchronization = $this->oldSynchronizationService->synchronize(synchronization: $synchronization, sourceObject: $taskWeNeed, unsafe: false, mapping: $mapping);
 
-        return $this->data;
+        return $data;
     }//end synchronizeTask()
 
 
@@ -125,10 +109,7 @@ class NotificationToTaakService
      */
     public function execute(array $configuration, array $data): array
     {
-        $this->data = $data;
-        $this->configuration = $configuration;
-
-        return $this->synchronizeTask();
+        return $this->synchronizeTask(configuration: $configuration, data: $data);
     }//end execute()
 
 
