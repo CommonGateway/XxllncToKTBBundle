@@ -100,7 +100,7 @@ class NotificationToTaakService
         $this->entityManager->flush();
 
         // Create response.
-        $response = ['message' => 'Notification received and task synchronized'];
+        $response         = ['message' => 'Notification received and task synchronized'];
         $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-type' => 'application/json']);
 
         return $data;
