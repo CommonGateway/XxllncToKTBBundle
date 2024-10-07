@@ -2,7 +2,7 @@
 
 A notification object from xxllnc
 
-![Class Diagram](https://github.com/CommonGateway/XxllncToKTBBundle/blob/task-notification/docs/schema/xxllnctoktb.notification.svg)
+![Class Diagram](https://github.com/CommonGateway/XxllncToKTBBundle/blob/main/docs/schema/xxllnctoktb.notification.svg)
 
 ## Properties
 
