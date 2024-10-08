@@ -11,7 +11,7 @@
     "class": "CommonGateway\\CoreBundle\\ActionHandler\\KTBToXxllncHandler",
     "configuration": {
         "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json",
-        "mapping": "",
-        "deleteMapping": ""
+        "mapping": "https://commongateway.nl/mapping/xxllnctoktb.TaakToTask.mapping.json",
+        "deleteMapping": "https://commongateway.nl/mapping/xxllnctoktb.TaakToTaskDelete.mapping.json"
     }
 }

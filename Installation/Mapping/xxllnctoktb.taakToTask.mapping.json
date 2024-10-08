@@ -1,0 +1,17 @@
+{
+    "title": "TaakToTask",
+    "$id": "https://commongateway.nl/mapping/xxllnctoktb.TaakToTask.mapping.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version": "0.0.1",
+    "passTrough": false,
+    "mapping": {
+        "case_uuid": "case_uuid",
+        "task_uuid": "task_uuid",
+        "title": "title"
+    },
+    "cast": {
+        "case_uuid": "unsetIfValue==case_uuid",
+        "task_uuid": "unsetIfValue==task_uuid",
+        "title": "unsetIfValue==title"
+    }
+}

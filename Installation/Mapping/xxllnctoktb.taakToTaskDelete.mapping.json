@@ -1,0 +1,13 @@
+{
+    "title": "TaakToTaskDelete",
+    "$id": "https://commongateway.nl/mapping/xxllnctoktb.TaakToTaskDelete.mapping.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version": "0.0.1",
+    "passTrough": false,
+    "mapping": {
+        "task_uuid": "task_uuid"
+    },
+    "cast": {
+        "task_uuid": "unsetIfValue==task_uuid"
+    }
+}

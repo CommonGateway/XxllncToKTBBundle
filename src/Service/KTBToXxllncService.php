@@ -1,14 +1,4 @@
 <?php
-/**
- * This class handles the synchronizations of CustomerInteractionBundle taken to zaaksysteem tasks.
- *
- * Can create, update and delete tasks.
- *
- * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
- * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
- *
- * @category Service
- */
 
 namespace CommonGateway\XxllncToKTBBundle\Service;
 
@@ -21,19 +11,18 @@ use App\Entity\Gateway as Source;
 use Psr\Log\LoggerInterface;
 use Ramsay\Uuid;
 
+/**
+ * This class handles the synchronizations of CustomerInteractionBundle taken to zaaksysteem tasks.
+ *
+ * Can create, update and delete tasks.
+ *
+ * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
+ * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * @category Service
+ */
 class KTBToXxllncService
 {
-
-    /**
-     * @var array
-     */
-    private array $configuration;
-
-    /**
-     * @var array
-     */
-    private array $data;
-
 
     /**
      * __construct.
@@ -97,23 +86,26 @@ class KTBToXxllncService
      *
      * Can handle create, update and delete. Prerequisite is that the taak has a zaak that is synchronized as case in the zaaksysteem.
      *
+     * @param array $data
+     * @param array $configuration
+     *
      * @return array $this->data
      */
-    private function synchronizeTaak(): array
+    private function synchronizeTaak(array $data, array $configuration): array
     {
         $this->pluginLogger->debug('KTBToXxllncService -> synchronizeTaak');
         $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
 
         // Get Source zaaksysteem v2.
-        $source = $this->resourceService->getSource(reference: $this->configuration['source'], pluginName: $pluginName);
+        $source = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
         if ($source === null) {
-            return $this->data;
+            return $data;
         }
 
         // Get taak object CustomerInterActionBundle.
-        $taakObject = $this->resourceService->getObject(id: $this->data['_self']['id'], pluginName: $pluginName);
+        $taakObject = $this->resourceService->getObject(id: $data['_self']['id'], pluginName: $pluginName);
         if ($taakObject === null) {
-            return $this->data;
+            return $data;
         }
 
         // Create or find a Synchronization.
@@ -121,8 +113,8 @@ class KTBToXxllncService
 
         $endpoint        = '/api/v2/cm/task';
         $getZaakSourceId = true;
-        $data            = $this->data;
-        switch ($this->configuration['currentThrow']) {
+        $data            = $data;
+        switch ($configuration['currentThrow']) {
             // If creating the sourceId should be new.
         case 'commongateway.object.create':
             $endpoint .= '/create';
@@ -136,19 +128,19 @@ class KTBToXxllncService
             // If creating or updating we use the same mapping and need the case_uuid and the task_uuid we have set in earlier cases.
         case 'commongateway.object.create':
         case 'commongateway.object.update':
-            $mapping      = $this->resourceService->getMapping($this->configuration['mapping'], pluginName: $pluginName);
+            $mapping      = $this->resourceService->getMapping($configuration['mapping'], pluginName: $pluginName);
             $zaakSourceId = $this->getZaakSourceId($taakObject->getValue('zaak'), $source);
             $data         = array_merge($data, ['case_uuid' => $zaakSourceId, 'task_uuid' => $sourceId]);
             // If deleting we need a different mapping and only need the task_uuid.
         case 'commongateway.object.delete':
             $endpoint       .= '/delete';
             $getZaakSourceId = false;
-            $mapping         = $this->resourceService->getMapping($this->configuration['deleteMapping'], pluginName: $pluginName);
+            $mapping         = $this->resourceService->getMapping($configuration['deleteMapping'], pluginName: $pluginName);
             $data            = array_merge($data, ['task_uuid' => $sourceId]);
             // If we have a different throw stop sync.
         default:
-            $this->pluginLogger->error("Stopping task sync, invalid event thrown: {$this->configuration['currentThrow']}");
-            return $this->data;
+            $this->pluginLogger->error("Stopping task sync, invalid event thrown: {$configuration['currentThrow']}");
+            return $data;
         }//end switch
 
         if ($getZaakSourceId === true) {
@@ -168,12 +160,12 @@ class KTBToXxllncService
             $taakSync->setSourceId($sourceId);
             $this->entityManager->persist($taakSync);
             $this->entityManager->flush();
-            $this->pluginLogger->info("Succesfully synchronized taak with id: {$this->data['_self']['id']} and sourceId: $sourceId .");
+            $this->pluginLogger->info("Succesfully synchronized taak with id: {$data['_self']['id']} and sourceId: $sourceId .");
         } else {
             $this->pluginLogger->error("No success message received from zaaksysteem, something went wrong synchronzing task.");
         }
 
-        return $this->data;
+        return $data;
 
     }//end synchronizeTaak()
 
@@ -181,18 +173,16 @@ class KTBToXxllncService
     /**
      * Executes synchronizeTaak
      *
-     * @param array $configuration
      * @param array $data
+     * @param array $configuration
      *
      * @return array $this->synchronizeTaak()
      */
-    public function execute(array $configuration, array $data): array
+    public function execute(array $data, array $configuration): array
     {
         $this->pluginLogger->debug('KTBToXxllncService -> execute');
-        $this->data          = $data;
-        $this->configuration = $configuration;
 
-        return $this->synchronizeTaak();
+        return $this->synchronizeTaak(data: $data, configuration: $configuration);
 
     }//end execute()
 
