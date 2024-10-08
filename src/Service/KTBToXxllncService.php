@@ -24,6 +24,7 @@ use Ramsay\Uuid;
 class KTBToXxllncService
 {
 
+
     /**
      * __construct.
      */

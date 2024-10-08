@@ -51,12 +51,12 @@ class KTBToXxllncHandler implements ActionHandlerInterface
             'description' => 'This handler sends the taak to xxllnc zaaksysteem task',
             'required'    => [],
             'properties'  => [
-                'source' => [
+                'source'        => [
                     'type'        => 'string',
                     'description' => 'The source we send the task to.',
                     'example'     => 'https://development.zaaksysteem.nl/source/xxllnc.zaaksysteemv2.source.json',
                 ],
-                'mapping' => [
+                'mapping'       => [
                     'type'        => 'string',
                     'description' => 'The mapping we use for taken to tasks.',
                     'example'     => 'https://commongateway.nl/mapping/xxllnctoktb.TaakToTask.mapping.json',
