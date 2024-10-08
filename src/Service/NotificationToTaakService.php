@@ -103,8 +103,9 @@ class NotificationToTaakService
         $data['taakId'] = $synchronization->getObject()->getId()->toString();
 
         // Create response.
-        // $response         = ['message' => 'Notification received and task synchronized'];
-        // $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-Type' => 'application/json']);
+        $response         = ['message' => 'Notification received and task synchronized'];
+        $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-Type' => 'application/json']);
+
         return $data;
 
     }//end synchronizeTask()
