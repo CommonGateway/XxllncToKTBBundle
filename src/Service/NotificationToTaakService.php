@@ -99,6 +99,9 @@ class NotificationToTaakService
         $this->entityManager->persist($synchronization);
         $this->entityManager->flush();
 
+        // Set taakId for the next action (sync case to zaak) which also updates the taak with the case url
+        $data['taakId'] = $synchronization->getObject()->getId()->toString();
+
         // Create response.
         $response         = ['message' => 'Notification received and task synchronized'];
         $data['response'] = new Response(\Safe\json_encode($response), 200, ['Content-Type' => 'application/json']);
