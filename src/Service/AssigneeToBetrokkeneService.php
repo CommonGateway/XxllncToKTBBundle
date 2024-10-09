@@ -43,7 +43,7 @@ class AssigneeToBetrokkeneService
      * Adds a betrokkene to a taak.
      *
      * @param ObjectEntity $taakBetrokkene The betrokkene to add to the taak.
-     * @param string       $taskId The ID of the taak to add the betrokkene to.
+     * @param string       $taskId         The ID of the taak to add the betrokkene to.
      *
      * @return ObjectEntity The updated taak object.
      */
@@ -52,12 +52,13 @@ class AssigneeToBetrokkeneService
         $this->pluginLogger->debug('AssigneeToBetrokkeneService -> addBetrokkeneToTaak');
 
         $taakObject = $this->resourceService->getObject(id: $taskId);
-        $taakObject->setValue('betrokkenen', [$taakBetrokkene=>getId()->toString()]);
+        $taakObject->setValue('betrokkenen', [$taakBetrokkene => getId()->toString()]);
         $this->entityManager->persist($taakObject);
         $this->entityManager->flush();
 
         return $taakObject;
-    }
+
+    }//end addBetrokkeneToTaak()
 
 
     /**
@@ -73,17 +74,17 @@ class AssigneeToBetrokkeneService
         $this->pluginLogger->debug('AssigneeToBetrokkeneService -> synchronizeAssignee');
         $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
 
-        if  ($data['body']['case_uuid'] === null) {
+        if ($data['body']['case_uuid'] === null) {
             $this->pluginLogger->error("Case uuid is null, can not sync assignee to betrokkene");
 
             return $data;
         }
 
         // get needed config objects.
-        $source  = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
-        $schema  = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
-        $mapping = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
-        $endpoint = $configuration['endpoint'] ?? "/case";
+        $source   = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
+        $schema   = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
+        $mapping  = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
+        $endpoint = ($configuration['endpoint'] ?? "/case");
 
         if ($source === null || $schema === null || $mapping === null) {
             return $data;
@@ -93,7 +94,7 @@ class AssigneeToBetrokkeneService
         try {
             $this->pluginLogger->info("Fetching case with case id: {$data['body']['case_uuid']}..");
             $response = $this->callService->call(source: $source, endpoint: $endpoint, method: 'GET');
-            $case = $this->callService->decodeResponse(source: $source, response: $response);
+            $case     = $this->callService->decodeResponse(source: $source, response: $response);
         } catch (Exception $e) {
             $this->pluginLogger->error("Failed to fetch case with case id: {$data['body']['case_uuid']}, message:  {$e->getMessage()}");
 
@@ -117,7 +118,7 @@ class AssigneeToBetrokkeneService
 
         return $data;
 
-    }//end synchronizeTask()
+    }//end synchronizeAssignee()
 
 
     /**
