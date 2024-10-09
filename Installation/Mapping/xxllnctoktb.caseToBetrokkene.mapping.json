@@ -1,0 +1,14 @@
+{
+    "title": "CaseToBetrokkene",
+    "description": "This mapping is used to map a case its assignee to a CustomerInteractionBundle betrokkene.",
+    "$id": "https://commongateway.nl/mapping/xxllnctoktb.CaseToBetrokkene.mapping.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
+    "version": "0.0.1",
+    "passTrough": false,
+    "mapping": {
+        "_sourceId": "id"
+    },
+    "cast": {
+        "_sourcedId": "unsetIfValue==id"
+    }
+}

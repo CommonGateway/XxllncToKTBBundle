@@ -10,17 +10,17 @@ use Psr\Cache\InvalidArgumentException;
 use Respect\Validation\Exceptions\ComponentException;
 
 /**
- * This class handles the execution of the NotificationToTaakService.
+ * This class handles the execution of the AssigneeToBetrokkeneService.
  *
  * This ActionHandler executes the
- * NotificationToTaak->syncNotificationToTaak.
+ * AssigneeToBetrokkene->synchronizeAssignee.
  *
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  *
  * @category ActionHandler
  */
-class NotificationToTaakHandler implements ActionHandlerInterface
+class AssigneeToBetrokkeneHandler implements ActionHandlerInterface
 {
 
 

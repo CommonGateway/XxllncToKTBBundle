@@ -40,9 +40,7 @@ class NotificationToTaakService
 
 
     /**
-     * Synchronizes a CustomerInteractionBundle taak to the zaaksysteem v2 task equilevant.
-     *
-     * Can handle create, update and delete. Prerequisite is that the taak has a zaak that is synchronized as case in the zaaksysteem.
+     * Synchronizes a zaaksysteem v2 notification to a CustomerInteractionBundle taak.
      *
      * @param array $data
      * @param array $configuration
@@ -112,12 +110,12 @@ class NotificationToTaakService
 
 
     /**
-     * Executes synchronizeTaak
+     * Executes synchronizeTask
      *
      * @param array $data
      * @param array $configuration
      *
-     * @return array $this->synchronizeTaak()
+     * @return array $this->synchronizeTask()
      */
     public function execute(array $data, array $configuration): array
     {

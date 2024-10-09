@@ -1,0 +1,26 @@
+{
+    "title": "SyncAssigneeToBetrokkene",
+    "description": "This action syncs the assignee of a task to a betrokkene object in the CustomerInteractionBundle.",
+    "$id": "https://commongateway.nl/action/xxllnctoktb.SyncAssigneeToBetrokkene.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["xxllnctoktb.assignee.received"],
+    "conditions": {
+        "and": [
+            {
+                "!!": { "var": "body.case_uuid" }
+            }
+            {
+                "!!": { "var": "taskId" }
+            }
+
+        ]
+    },
+    "class": "CommonGateway\\XxllncToKTBBundle\\ActionHandler\\AssigneeToBetrokkeneHandler",
+    "configuration": {
+        "mapping": "https://commongateway.nl/mapping/xxllnctoktb.CaseToBetrokkene.mapping.json",
+        "schema": "https://commongateway.nl/klant.taak.betrokkene.schema.json",
+        "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteem.source.json",
+        "endpoint": "/case"
+    }
+}
