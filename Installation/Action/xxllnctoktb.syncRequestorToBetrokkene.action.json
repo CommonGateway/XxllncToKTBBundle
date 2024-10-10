@@ -1,0 +1,27 @@
+{
+    "title": "SyncRequestorToBetrokkene",
+    "description": "This action syncs the requestor of a task to a betrokkene object in the CustomerInteractionBundle.",
+    "$id": "https://commongateway.nl/action/xxllnctoktb.SyncRequestorToBetrokkene.action.json",
+    "$schema": "https://docs.commongateway.nl/schemas/Action.schema.json",
+    "version": "0.0.1",
+    "listens": ["xxllnctoktb.requestor.received"],
+    "async": true,
+    "conditions": {
+        "and": [
+            {
+                "!!": { "var": "case_uuid" }
+            },
+            {
+                "!!": { "var": "taakId" }
+            }
+
+        ]
+    },
+    "class": "CommonGateway\\XxllncToKTBBundle\\ActionHandler\\RequestorToBetrokkeneHandler",
+    "configuration": {
+        "mapping": "https://commongateway.nl/mapping/xxllnctoktb.CaseToBetrokkene.mapping.json",
+        "schema": "https://commongateway.nl/klant.taak.betrokkene.schema.json",
+        "source": "https://development.zaaksysteem.nl/source/xxllnc.zaaksysteem.source.json",
+        "endpoint": "/case"
+    }
+}

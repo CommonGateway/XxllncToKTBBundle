@@ -2,7 +2,7 @@
     "title": "TaskToTaak",
     "$id": "https://commongateway.nl/mapping/xxllnctoktb.TaskToTaak.mapping.json",
     "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "passTrough": false,
     "mapping": {
         "_sourceId": "id",
@@ -12,6 +12,7 @@
         "toelichting": "attributes.description",
         "verloopdatum": "attributes.due_date",
         "vervaldatum": "attributes.due_date",
+        "extraData": "[\"leverancier\": \"Xxllnc\"]",
         "status": "{% if attributes.completed|default and attributes.completed is same as(true) %}gesloten{% else %}open{% endif %}"
     },
     "cast": {
@@ -20,6 +21,7 @@
         "onderwerp": "unsetIfValue==attributes.title",
         "toelichting": "unsetIfValue==attributes.description",
         "verloopdatum": "unsetIfValue==attributes.attributes.due_date",
-        "vervaldatum": "unsetIfValue==attributes.attributes.due_date"
+        "vervaldatum": "unsetIfValue==attributes.attributes.due_date",
+        "extraData": "jsonToArray"
     }
 }
