@@ -2,26 +2,26 @@
 
 namespace CommonGateway\XxllncToKTBBundle\Service;
 
+use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
 use CommonGateway\CoreBundle\Service\GatewayResourceService as ResourceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
 
 /**
- * This class handles the synchronization of a assignee of a task to a betrokkene object in the CustomerInteractionBundle.
+ * This class handles the synchronization of a requestor of a task to a betrokkene object in the CustomerInteractionBundle.
  *
- * Fetches the case of the assignee and then synchronizes the assignee to the betrokkene.
+ * Fetches the case of the requestor and then synchronizes the requestor to the betrokkene.
  *
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  *
  * @category Service
  */
-class AssigneeToBetrokkeneService
+class RequestorToBetrokkeneService
 {
 
 
@@ -43,16 +43,23 @@ class AssigneeToBetrokkeneService
      * Adds a betrokkene to a taak.
      *
      * @param ObjectEntity $taakBetrokkene The betrokkene to add to the taak.
-     * @param string       $taskId         The ID of the taak to add the betrokkene to.
+     * @param string       $taakId         The ID of the taak to add the betrokkene to.
      *
-     * @return ObjectEntity The updated taak object.
+     * @return ObjectEntity|null The updated taak object.
      */
-    private function addBetrokkeneToTaak(ObjectEntity $taakBetrokkene, string $taskId): ObjectEntity
+    private function addBetrokkeneToTaak(ObjectEntity $taakBetrokkene, string $taakId): ?ObjectEntity
     {
-        $this->pluginLogger->debug('AssigneeToBetrokkeneService -> addBetrokkeneToTaak');
+        $this->pluginLogger->debug('RequestorToBetrokkeneService -> addBetrokkeneToTaak');
 
-        $taakObject = $this->resourceService->getObject(id: $taskId);
-        $taakObject->setValue('betrokkenen', [$taakBetrokkene => getId()->toString()]);
+        $taakObject = $this->resourceService->getObject(id: $taakId);
+        if ($taakObject === null) {
+            $this->pluginLogger->error("Taak not found with id {$taakId}, can not add betrokkene to it", ['plugin' => 'common-gateway/xxllnc-to-ktb-bundle']);
+
+            return null;
+        }
+
+
+        $taakObject->setValue('betrokkenen', [$taakBetrokkene->getId()->toString()]);
         $this->entityManager->persist($taakObject);
         $this->entityManager->flush();
 
@@ -62,29 +69,23 @@ class AssigneeToBetrokkeneService
 
 
     /**
-     * Synchronizes a zaaksysteem case assignee to a betrokkene object in the CustomerInteractionBundle.
+     * Synchronizes a zaaksysteem case requestor to a betrokkene object in the CustomerInteractionBundle.
      *
      * @param array $data
      * @param array $configuration
      *
      * @return array $data
      */
-    private function synchronizeAssignee(array $data, array $configuration): array
+    private function synchronizeRequestor(array $data, array $configuration): array
     {
-        $this->pluginLogger->debug('AssigneeToBetrokkeneService -> synchronizeAssignee');
+        $this->pluginLogger->debug('RequestorToBetrokkeneService -> synchronizeRequestor');
         $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
-
-        if ($data['body']['case_uuid'] === null) {
-            $this->pluginLogger->error("Case uuid is null, can not sync assignee to betrokkene");
-
-            return $data;
-        }
 
         // get needed config objects.
         $source   = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
         $schema   = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
         $mapping  = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
-        $endpoint = ($configuration['endpoint'] ?? "/case");
+        $endpoint = ($configuration['endpoint'] ?? "/case") . "/{$data['case_uuid']}";
 
         if ($source === null || $schema === null || $mapping === null) {
             return $data;
@@ -92,17 +93,23 @@ class AssigneeToBetrokkeneService
 
         // Fetch the case of the task
         try {
-            $this->pluginLogger->info("Fetching case with case id: {$data['body']['case_uuid']}..");
+            $this->pluginLogger->info("Fetching case with case id: {$data['case_uuid']}..");
             $response = $this->callService->call(source: $source, endpoint: $endpoint, method: 'GET');
             $case     = $this->callService->decodeResponse(source: $source, response: $response);
         } catch (Exception $e) {
-            $this->pluginLogger->error("Failed to fetch case with case id: {$data['body']['case_uuid']}, message:  {$e->getMessage()}");
+            $this->pluginLogger->error("Failed to fetch case with case id: {$data['case_uuid']}, message:  {$e->getMessage()}", ['plugin' => $pluginName]);
 
             return $data;
         }//end try
 
-        // Id of assignee in a case.
-        $sourceIdLocation = '?';
+        if (isset($case['result']['instance']['requestor']['instance']['subject']['instance']['personal_number']) === false) {
+            $this->pluginLogger->error("Case requestor personal number is not set, can not sync requestor to betrokkene", ['plugin' => $pluginName]);
+
+            return $data;
+        }
+
+        // Id of requestor in a case.
+        $sourceIdLocation = 'result.instance.requestor.reference';
 
         // Find or create synchronization object.
         $synchronization = $this->synchronizationService->findSyncBySource(source: $source, entity: $schema, sourceId: $sourceIdLocation, endpoint: $endpoint);
@@ -110,28 +117,29 @@ class AssigneeToBetrokkeneService
         // Synchronize.
         $synchronization = $this->synchronizationService->synchronize(synchronization: $synchronization, sourceObject: $case, unsafe: false, mapping: $mapping);
 
+
         // Save to database.
         $this->entityManager->persist($synchronization);
         $this->entityManager->flush();
 
-        $this->addBetrokkeneToTaak($synchronization->getObject(), $data['taskId']);
+        $this->addBetrokkeneToTaak($synchronization->getObject(), $data['taakId']);
 
         return $data;
 
-    }//end synchronizeAssignee()
+    }//end synchronizeRequestor()
 
 
     /**
-     * Executes synchronizeAssignee
+     * Executes synchronizeRequestor
      *
      * @param array $data
      * @param array $configuration
      *
-     * @return array $this->synchronizeAssignee()
+     * @return array $this->synchronizeRequestor()
      */
     public function execute(array $data, array $configuration): array
     {
-        return $this->synchronizeAssignee(data: $data, configuration: $configuration);
+        return $this->synchronizeRequestor(data: $data, configuration: $configuration);
 
     }//end execute()
 

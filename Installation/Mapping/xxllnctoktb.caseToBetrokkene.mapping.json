@@ -1,14 +1,22 @@
 {
     "title": "CaseToBetrokkene",
-    "description": "This mapping is used to map a case its assignee to a CustomerInteractionBundle betrokkene.",
+    "description": "This mapping is used to map a case its requestor to a CustomerInteractionBundle betrokkene.",
     "$id": "https://commongateway.nl/mapping/xxllnctoktb.CaseToBetrokkene.mapping.json",
     "$schema": "https://docs.commongateway.nl/schemas/Mapping.schema.json",
     "version": "0.0.1",
     "passTrough": false,
     "mapping": {
-        "_sourceId": "id"
+        "_sourceId": "result.instance.requestor.reference",
+        "betrokkeneType": "natuurlijk_persoon",
+        "betrokkene._sourceId": "{% if result.instance.requestor.reference|default and result.instance.requestor.instance.subject.instance.first_names|default %}{{ result.instance.requestor.reference~'-'~result.instance.requestor.instance.subject.instance.first_names }}{% endif %}",
+        "betrokkene.naam": "result.instance.requestor.instance.subject.instance.first_names",
+        "betrokkene.inpBsn": "result.instance.requestor.instance.subject.instance.personal_number"
     },
     "cast": {
-        "_sourcedId": "unsetIfValue==id"
+        "_sourcedId": "unsetIfValue==result.instance.requestor.reference",
+        "betrokkene._sourceId": "unsetIfValue==",
+        "betrokkene.naam": "unsetIfValue==result.instance.requestor.instance.first_names",
+        "betrokkene.inpBsn": "unsetIfValue==result.instance.requestor.instance.personal_number",
+        "betrokkene": "unsetIfValue=="
     }
 }

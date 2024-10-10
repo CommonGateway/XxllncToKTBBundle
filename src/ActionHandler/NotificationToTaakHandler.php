@@ -4,7 +4,7 @@ namespace CommonGateway\XxllncToKTBBundle\ActionHandler;
 
 use App\Exception\GatewayException;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\XxllncToKTBBundle\Service\NotificationToTaakService as Service;
+use CommonGateway\XxllncToKTBBundle\Service\NotificationToTaakService;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
 use Respect\Validation\Exceptions\ComponentException;
@@ -27,10 +27,10 @@ class NotificationToTaakHandler implements ActionHandlerInterface
     /**
      * Class constructor.
      *
-     * @param Service $service
+     * @param NotificationToTaakService $service
      */
     public function __construct(
-        private readonly Service $service,
+        private readonly NotificationToTaakService $service,
     ) {
 
     }//end __construct()

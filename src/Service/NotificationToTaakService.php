@@ -65,11 +65,11 @@ class NotificationToTaakService
 
         // Fetch all tasks of the case
         try {
-            $this->pluginLogger->info("Fetching tasks for case id: {$data['case_uuid']}..");
+            $this->pluginLogger->info("Fetching tasks for case id: {$data['case_uuid']}..", ['plugin' => $pluginName]);
             $response = $this->callService->call(source: $source, endpoint: $endpoint, method: 'GET');
             $response = $this->callService->decodeResponse(source: $source, response: $response);
         } catch (Exception $e) {
-            $this->pluginLogger->error("Failed to fetch tasks for case: {$data['case_uuid']}, message:  {$e->getMessage()}");
+            $this->pluginLogger->error("Failed to fetch tasks for case: {$data['case_uuid']}, message:  {$e->getMessage()}", ['plugin' => $pluginName]);
 
             return $data;
         }//end try
@@ -82,7 +82,7 @@ class NotificationToTaakService
         }
 
         if (isset($taskWeNeed) === false) {
-            $this->pluginLogger->error("Could not find the correct task ({$data['entity_id']}) in the tasks of the case ({$data['case_uuid']})");
+            $this->pluginLogger->error("Could not find the correct task ({$data['entity_id']}) in the tasks of the case ({$data['case_uuid']})", ['plugin' => $pluginName]);
 
             return $data;
         }
