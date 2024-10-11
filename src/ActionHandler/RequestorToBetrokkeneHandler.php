@@ -4,33 +4,33 @@ namespace CommonGateway\XxllncToKTBBundle\ActionHandler;
 
 use App\Exception\GatewayException;
 use CommonGateway\CoreBundle\ActionHandler\ActionHandlerInterface;
-use CommonGateway\XxllncToKTBBundle\Service\NotificationToTaakService;
+use CommonGateway\XxllncToKTBBundle\Service\RequestorToBetrokkeneService;
 use Psr\Cache\CacheException;
 use Psr\Cache\InvalidArgumentException;
 use Respect\Validation\Exceptions\ComponentException;
 
 /**
- * This class handles the execution of the NotificationToTaakService.
+ * This class handles the execution of the RequestorToBetrokkeneService.
  *
  * This ActionHandler executes the
- * NotificationToTaak->syncNotificationToTaak.
+ * RequestorToBetrokkene->synchronizeRequestor.
  *
  * @author  Conduction BV <info@conduction.nl>, Barry Brands <barry@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  *
  * @category ActionHandler
  */
-class NotificationToTaakHandler implements ActionHandlerInterface
+class RequestorToBetrokkeneHandler implements ActionHandlerInterface
 {
 
 
     /**
      * Class constructor.
      *
-     * @param NotificationToTaakService $service
+     * @param RequestorToBetrokkeneService $service
      */
     public function __construct(
-        private readonly NotificationToTaakService $service,
+        private readonly RequestorToBetrokkeneService $service,
     ) {
 
     }//end __construct()

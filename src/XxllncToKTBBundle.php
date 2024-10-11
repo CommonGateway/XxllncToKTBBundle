@@ -1,6 +1,6 @@
 <?php
 /**
- * The pet store bundle aims at providing an example common gateway plugin
+ * The XxllncToKTBBundle bundle handles synchronization between zaaksysteem v2 notifications for tasks and CustomerInteractionBundle taken.
  *
  * @author  Conduction.nl <info@conduction.nl>
  * @license EUPL-1.2 https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
@@ -12,6 +12,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class XxllncToKTBBundle extends Bundle
 {
+
+    const PLUGIN_NAME = 'common-gateway/xxllnc-to-ktb-bundle';
 
 
     /**
