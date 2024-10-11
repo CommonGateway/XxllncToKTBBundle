@@ -13,7 +13,7 @@
         "betrokkene.inpBsn": "result.instance.requestor.instance.subject.instance.personal_number"
     },
     "cast": {
-        "_sourcedId": "unsetIfValue==result.instance.requestor.reference",
+        "_sourceId": "unsetIfValue==result.instance.requestor.reference",
         "betrokkene._sourceId": "unsetIfValue==",
         "betrokkene.naam": "unsetIfValue==result.instance.requestor.instance.first_names",
         "betrokkene.inpBsn": "unsetIfValue==result.instance.requestor.instance.personal_number",
