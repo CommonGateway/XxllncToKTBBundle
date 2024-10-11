@@ -58,7 +58,6 @@ class RequestorToBetrokkeneService
             return null;
         }
 
-
         $taakObject->setValue('betrokkenen', [$taakBetrokkene->getId()->toString()]);
         $this->entityManager->persist($taakObject);
         $this->entityManager->flush();
@@ -85,7 +84,7 @@ class RequestorToBetrokkeneService
         $source   = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
         $schema   = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
         $mapping  = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
-        $endpoint = ($configuration['endpoint'] ?? "/case") . "/{$data['case_uuid']}";
+        $endpoint = ($configuration['endpoint'] ?? "/case")."/{$data['case_uuid']}";
 
         if ($source === null || $schema === null || $mapping === null) {
             return $data;
@@ -116,7 +115,6 @@ class RequestorToBetrokkeneService
 
         // Synchronize.
         $synchronization = $this->synchronizationService->synchronize(synchronization: $synchronization, sourceObject: $case, unsafe: false, mapping: $mapping);
-
 
         // Save to database.
         $this->entityManager->persist($synchronization);
