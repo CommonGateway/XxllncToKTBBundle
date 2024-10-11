@@ -2,6 +2,7 @@
 
 namespace CommonGateway\XxllncToKTBBundle\Service;
 
+use CommonGateway\XxllncToKTBBundle\XxllncToKTBBundle;
 use App\Entity\ObjectEntity;
 use App\Service\SynchronizationService;
 use CommonGateway\CoreBundle\Service\CallService;
@@ -49,11 +50,11 @@ class RequestorToBetrokkeneService
      */
     private function addBetrokkeneToTaak(ObjectEntity $taakBetrokkene, string $taakId): ?ObjectEntity
     {
-        $this->pluginLogger->debug('RequestorToBetrokkeneService -> addBetrokkeneToTaak');
+        $this->pluginLogger->debug('RequestorToBetrokkeneService -> addBetrokkeneToTaak', ['plugin' => XxllncToKTBBundle::PLUGIN_NAME]);
 
         $taakObject = $this->resourceService->getObject(id: $taakId);
         if ($taakObject === null) {
-            $this->pluginLogger->error("Taak not found with id {$taakId}, can not add betrokkene to it", ['plugin' => 'common-gateway/xxllnc-to-ktb-bundle']);
+            $this->pluginLogger->error("Taak not found with id {$taakId}, can not add betrokkene to it", ['plugin' => XxllncToKTBBundle::PLUGIN_NAME]);
 
             return null;
         }
@@ -77,13 +78,12 @@ class RequestorToBetrokkeneService
      */
     private function synchronizeRequestor(array $data, array $configuration): array
     {
-        $this->pluginLogger->debug('RequestorToBetrokkeneService -> synchronizeRequestor');
-        $pluginName = 'common-gateway/xxllnc-to-ktb-bundle';
+        $this->pluginLogger->debug('RequestorToBetrokkeneService -> synchronizeRequestor', ['plugin' => XxllncToKTBBundle::PLUGIN_NAME]);
 
         // get needed config objects.
-        $source   = $this->resourceService->getSource(reference: $configuration['source'], pluginName: $pluginName);
-        $schema   = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: $pluginName);
-        $mapping  = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: $pluginName);
+        $source   = $this->resourceService->getSource(reference: $configuration['source'], pluginName: XxllncToKTBBundle::PLUGIN_NAME);
+        $schema   = $this->resourceService->getSchema(reference: $configuration['schema'], pluginName: XxllncToKTBBundle::PLUGIN_NAME);
+        $mapping  = $this->resourceService->getMapping(reference: $configuration['mapping'], pluginName: XxllncToKTBBundle::PLUGIN_NAME);
         $endpoint = ($configuration['endpoint'] ?? "/case")."/{$data['case_uuid']}";
 
         if ($source === null || $schema === null || $mapping === null) {
@@ -92,17 +92,17 @@ class RequestorToBetrokkeneService
 
         // Fetch the case of the task
         try {
-            $this->pluginLogger->info("Fetching case with case id: {$data['case_uuid']}..");
+            $this->pluginLogger->info("Fetching case with case id: {$data['case_uuid']}..", ['plugin' => XxllncToKTBBundle::PLUGIN_NAME]);
             $response = $this->callService->call(source: $source, endpoint: $endpoint, method: 'GET');
             $case     = $this->callService->decodeResponse(source: $source, response: $response);
         } catch (Exception $e) {
-            $this->pluginLogger->error("Failed to fetch case with case id: {$data['case_uuid']}, message:  {$e->getMessage()}", ['plugin' => $pluginName]);
+            $this->pluginLogger->error("Failed to fetch case with case id: {$data['case_uuid']}, message:  {$e->getMessage()}", ['plugin' => XxllncToKTBBundle::PLUGIN_NAME]);
 
             return $data;
         }//end try
 
         if (isset($case['result']['instance']['requestor']['instance']['subject']['instance']['personal_number']) === false) {
-            $this->pluginLogger->error("Case requestor personal number is not set, can not sync requestor to betrokkene", ['plugin' => $pluginName]);
+            $this->pluginLogger->error("Case requestor personal number is not set, can not sync requestor to betrokkene", ['plugin' => XxllncToKTBBundle::PLUGIN_NAME]);
 
             return $data;
         }
