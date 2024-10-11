@@ -15,6 +15,7 @@ class XxllncToKTBBundle extends Bundle
 
     const PLUGIN_NAME = 'common-gateway/xxllnc-to-ktb-bundle';
 
+
     /**
      * Returns the path the bundle is in
      *
